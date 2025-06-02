@@ -27,7 +27,7 @@ django-phonenumbers = "^1.0.1"
 djangorestframework-simplejwt = "^5.5.0"
 drf-yasg = "^1.21.10"
 redis = "^5.2.1"
-coverage = "^7.7.1"
+gunicorn = "^23.0.0"
 
 [tool.poetry.group.tests.dependencies]
 coverage = "^7.7.1"
