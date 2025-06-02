@@ -6,8 +6,8 @@ from users.models import User
 class EducationalModule(models.Model):
     name = models.CharField(max_length=150, verbose_name="Название образовательного модуля",
                             help_text="Введите название модуля")
-    description = models.TextField(verbose_name="Описание образовательного модуля", help_text="Введите описание модуля",
-                                   null=True, blank=True)
+    description = models.TextField(verbose_name="Описание образовательного модуля", null=True, blank=True,
+                                   help_text="Введите описание модуля")
 
     class Meta:
         verbose_name = "Образовательный модуль"
@@ -40,7 +40,7 @@ class Lesson(models.Model):
     video_link = models.CharField(max_length=255, verbose_name="Ссылка на урок", help_text="Добавьте ссылку на урок")
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, verbose_name="Тема",
                               help_text="Выберите образовательную тему", related_name="lessons", null=True,
-                                           blank=True)
+                              blank=True)
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Автор урока",
                               help_text="Выберите автора урока", related_name="lessons", null=True, blank=True)
 
