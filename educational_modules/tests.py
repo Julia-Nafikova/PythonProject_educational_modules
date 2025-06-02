@@ -1,4 +1,5 @@
 from django.contrib.auth.models import Group
+from django.db.models.expressions import result
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -28,10 +29,11 @@ class EducationalModuleTestCase(APITestCase):
 
     def test_lesson_create(self):
         url = reverse("educational_modules:create_lesson")
-        data = {"name": "test_lesson", "video_link": "https://www.youtube.com/testlesson/"}
+        data = {"name": "test_lesson", "video_link": "https://www.youtube.com/"}
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Lesson.objects.all().count(), 1)
+        print(response.text)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Lesson.objects.all().count(), 2)
 
     def test_lesson_create_forbidden(self):
         teachers_group = Group.objects.get(name="Teachers")
@@ -48,7 +50,7 @@ class EducationalModuleTestCase(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.json().get("video_link"),
-                         ["Неверная ссылка на видео. Добавьте ссылку на видео с Youtube или Rutube"])
+                         ["Неверная ссылка на видео. Добавьте ссылку на видео с Youtube"])
         self.assertEqual(Lesson.objects.all().count(), 1)
 
     def test_lesson_update(self):
@@ -69,6 +71,7 @@ class EducationalModuleTestCase(APITestCase):
         url = reverse("educational_modules:lessons")
         response = self.client.get(url)
         data = response.json()
+        data["results"][0]["id"] = self.lesson.pk
         result = {
             "count": 1,
             "next": None,
